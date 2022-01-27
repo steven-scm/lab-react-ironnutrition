@@ -1,10 +1,16 @@
 import React from 'react';
+import { useState } from "react";
+import TodayFood from "./../components/TodayFood";
+
 
 
 
 
 
 const FoodBox = (props) => {
+
+    const [isClicked, setIsClicked] = useState(false);
+
 
     console.log("props ", props);
     const food = props.food;
@@ -30,12 +36,13 @@ const FoodBox = (props) => {
                 <div className="media-right">
                     <div className="field has-addons">
                         <div className="control">
-                            <input className="input" type="number" value={food.quantity ? food.quantity : 1} />
+                            <input className="input" type="number" />
                         </div>
                         <div className="control">
-                            <button className="button is-info">
+                            <button className="button is-info" onClick={() => setIsClicked(!isClicked)}>
                                 +
                             </button>
+                            {isClicked && (<TodayFood food={food} />)}
                         </div>
                     </div>
                 </div>

@@ -2,12 +2,18 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 
-
 import foods from './foods.json'
 import FoodBox from "./components/FoodBox";
 import { useState } from "react";
 
-const baseFood = foods;
+import Search from "./components/Search";
+import TodayFood from "./components/TodayFood";
+
+
+
+
+
+const baseFood = [...foods];
 console.log("BASEFOOD ", baseFood);
 
 
@@ -26,8 +32,12 @@ function App() {
   console.log("The state: ", foods);
   console.log("The setFoods: ", setFoods);
 
+  const [searchedString, setSearchedString] = useState("");
+
 
   const [isClicked, setIsClicked] = useState(false);
+
+  // const [todaysFood, setTodaysFood] = useState([]);
 
 
 
@@ -39,6 +49,7 @@ function App() {
   const [name, setName] = useState("");
   const [calories, setCalories] = useState("");
   const [image, setImage] = useState("");
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -52,6 +63,15 @@ function App() {
 
 
 
+  let searchedFoods = null;
+  if (searchedString !== "") {
+    searchedFoods = foods.filter((food) => {
+      return food.name.toLowerCase().includes(searchedString.toLowerCase());
+    });
+  } else {
+    searchedFoods = foods;
+  }
+
 
   // return (
   //   <div className="App">
@@ -64,8 +84,13 @@ function App() {
   return (
 
     <div className="App">
+      <h1 class="title">IronNutrition</h1>
+      <br></br>
+      <div className='today-food-list' style={{ margin: "auto", width: "500px", height: "500px", backgroundColor: "dodgerblue", border: "1px black solid" }}>
+        <TodayFood food={foods} />
+      </div>
+      <Search searchedString={searchedString} callbackSearch={setSearchedString} />
       <div className="Create">
-
         <button className="button is-primary" onClick={() => setIsClicked(!isClicked)}>Add a new food!</button>
         {isClicked && (
 
@@ -98,27 +123,21 @@ function App() {
             <button>Add food</button>
           </form>
         )}
-
-
       </div>
+
       <div className="food-list">
-        {foods.map((food) => {
+        {searchedFoods.map((food) => {
           console.log(food)
           return (
             <FoodBox food={food} />
           );
         })}
       </div>
-    </div>
+    </div >
 
 
 
   )
-
-
-
-
-
 
 
 }
